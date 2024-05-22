@@ -1,0 +1,6 @@
+@Grzanek_HostAddress = http://localhost:5142
+
+GET {{Grzanek_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
