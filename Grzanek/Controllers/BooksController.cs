@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Grzanek.Controllers
 {
@@ -57,7 +58,7 @@ namespace Grzanek.Controllers
         {
             try
             {
-                string jsonString = JsonSerializer.Serialize(books);
+                string jsonString = JsonConvert.SerializeObject(books, Formatting.Indented);
                 System.IO.File.WriteAllText(_jsonFilePath, jsonString);
             }
             catch (IOException)
