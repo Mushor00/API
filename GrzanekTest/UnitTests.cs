@@ -9,7 +9,7 @@ using Microsoft.Extensions.FileProviders;
 
 namespace API.Tests
 {
-    public class BooksControllerTests
+    public class ControllersTests
     {
         [Fact]
         public void GetBooks_ReturnsOkResult_WithListOfBooks()
@@ -30,7 +30,7 @@ namespace API.Tests
         {
             // Arrange
             var controller = new BooksController(new TestWebHostEnvironment());
-            var book = new Books {Tytul = "Test Book", Autor = "Test Author" };
+            var book = new Books { Tytul = "Test Book", Autor = "Test Author" };
 
             // Act
             var result = controller.AddBook(book) as OkResult;
@@ -43,6 +43,41 @@ namespace API.Tests
             Assert.Contains(booksList, b => b.Tytul == book.Tytul && b.Autor == book.Autor);
         }
 
+
+
+
+
+        [Fact]
+        public void GetToRead_ReturnsOkResult_WithListOfBooksToRead()
+        {
+            // Arrange
+            var controller = new ToReadController(new TestWebHostEnvironment());
+
+            // Act
+            var result = controller.GetToRead() as OkObjectResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.IsType<List<ToRead>>(result.Value);
+        }
+
+        [Fact]
+        public void AddToRead_ReturnsOkResult_AfterAddingBookToRead()
+        {
+            // Arrange
+            var controller = new ToReadController(new TestWebHostEnvironment());
+            var book = new ToRead { Tytul = "Test Book", Autor = "Test Author" };
+
+            // Act
+            var result = controller.AddToRead(book) as OkResult;
+            var books = controller.GetToRead() as OkObjectResult;
+            var booksList = books.Value as List<ToRead>;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.NotNull(books);
+            Assert.Contains(booksList, b => b.Tytul == book.Tytul && b.Autor == book.Autor);
+        }
 
         // Test implementation of IWebHostEnvironment for testing purposes
         private class TestWebHostEnvironment : IWebHostEnvironment
