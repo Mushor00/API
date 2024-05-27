@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Grzanek.Controllers
+namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]

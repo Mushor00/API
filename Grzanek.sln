@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Grzanek", "Grzanek\Grzanek.csproj", "{5E2080EB-EF4B-4E6F-BD0C-CE37F8867E1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "Grzanek\API.csproj", "{5E2080EB-EF4B-4E6F-BD0C-CE37F8867E1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrzanekTest", "GrzanekTest\GrzanekTest.csproj", "{E09C63AE-9400-481A-8607-D86A0EFBDACF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APITEST", "GrzanekTest\APITEST.csproj", "{E09C63AE-9400-481A-8607-D86A0EFBDACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
