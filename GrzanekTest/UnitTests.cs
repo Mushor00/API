@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using System.IO;
 using API.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using Xunit;
 using Microsoft.Extensions.FileProviders;
 
 namespace API.Tests
@@ -30,7 +26,7 @@ namespace API.Tests
         {
             // Arrange
             var controller = new BooksController(new TestWebHostEnvironment());
-            var book = new Books { Tytul = "Test Book", Autor = "Test Author" };
+            var book = new Books {Tytul = "Test Book", Autor = "Test Author" };
 
             // Act
             var result = controller.AddBook(book) as OkResult;
