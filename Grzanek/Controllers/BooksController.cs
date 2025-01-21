@@ -1,69 +1,79 @@
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using API.Services;
+using Microsoft.Data.SqlClient;
+
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class BooksController : Controller
+    public class BooksController : ControllerBase
     {
-        private readonly string _jsonFilePath;
-        private readonly IWebHostEnvironment _environment;
 
-        public BooksController(IWebHostEnvironment environment)
-        {
-            _environment = environment;
-            _jsonFilePath = Path.Combine(_environment.ContentRootPath, "Data", "Books.json");
-        }
+        private readonly IBooksService _books;
 
-        [HttpGet(Name = "GetBooks")]
-        public IActionResult GetBooks()
-        {
-            List<Books> books = LoadBooksFromJson();
-            if (books == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(books);
-        }
-
-        [HttpPost(Name = "AddBook")]
-        public IActionResult AddBook(Books book)
-        {
-            List<Books> books = LoadBooksFromJson() ?? new List<Books>();
-            books.Add(book);
-            SaveBooksToJson(books);
-            return Ok();
-        }
-
-        private List<Books> LoadBooksFromJson()
+        [HttpGet]
+        [Route("allbooks")]
+        public async Task<IActionResult> GetBooks([FromQuery] int ID)
         {
             try
             {
-                using (StreamReader reader = new StreamReader(_jsonFilePath))
-                {
-                    string json = reader.ReadToEnd();
-                    return JsonSerializer.Deserialize<List<Books>>(json);
-                }
+                var result = await _books.GetBooks(ID);
+                return Ok(result);
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                return null;
+                return BadRequest(e.Message);
             }
+            
         }
 
-        private void SaveBooksToJson(List<Books> books)
+        [HttpPost]
+        [Route("addbooks")]
+        public async Task<IActionResult> AddBooks(Books book)
         {
             try
             {
-                string jsonString = JsonConvert.SerializeObject(books, Formatting.Indented);
-                System.IO.File.WriteAllText(_jsonFilePath, jsonString);
+                var connectionString = "TODO!;";
+                var connection = new Microsoft.Data.SqlClient.SqlConnection(connectionString);
+                connection.Open();
+                var bookID = book.ID;
+                var properTytul = book.Tytul!.Replace("'", "\"");
+                var properAutor = book.Autor!.Replace("'", "\"");
+                var query = $"INSERT INTO Books VALUES ('{bookID}', {book.Data}, '{properTytul}', '{properAutor}')";
+                var commmand = new Microsoft.Data.SqlClient.SqlCommand(query, connection);
+                var id = commmand.ExecuteNonQuery();
+                connection.Close();
+                return Ok();
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                
+                return BadRequest(e.Message);
+            }
+            
+        }
+
+
+        [HttpDelete]
+        [Route("deletebooks")]
+        public IActionResult DeleteBooks(Books book)
+        {
+            try
+            {
+                var connectionString = "TODO!;";
+                var connection = new SqlConnection(connectionString);
+                connection.Open();
+                var properTytul = book.Tytul!.Replace("'", "\"");
+                var query = $"DELETE FROM Books WHERE Tytul IS LIKE '{properTytul}'";
+                var commmand = new SqlCommand(query, connection);
+                var id = commmand.ExecuteNonQuery();
+                connection.Close();
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
             }
         }
     }
