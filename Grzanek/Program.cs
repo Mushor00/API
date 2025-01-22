@@ -1,3 +1,4 @@
+using API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,7 @@ builder.Services.AddCors(options =>
 
 
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<BooksService>();
+builder.Services.AddScoped<IBooksService>();
 
 
 var app = builder.Build();

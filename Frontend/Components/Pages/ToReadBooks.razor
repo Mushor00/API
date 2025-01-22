@@ -1,6 +1,6 @@
 ﻿@page "/toreadbooks"
 @using API.Services
-@inject BooksService BooksService
+@inject IToReadService BooksService
 
 <h3>Książki do przeczytania</h3>
 @if (booksToRead == null)
@@ -22,10 +22,10 @@ else
     [Inject] private NavigationManager Nav { get; set; }
     private List<ToRead> booksToRead;
 
-    protected override async Task OnInitializedAsync()
-    {
-        booksToRead = await BooksService.GetToReadBooks();
-    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     booksToRead = await BooksService.GetToReadBooks();
+    // }
 
     private void NavigateToAddToReadBook()
     {
