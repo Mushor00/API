@@ -1,70 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
+using API.Services;
+using Microsoft.Data.SqlClient;
+
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ToReadController : Controller
+    public class ToReadController : ControllerBase
     {
-        private readonly string _jsonFilePath;
-        private readonly IWebHostEnvironment _enviromental;
 
-        public ToReadController(IWebHostEnvironment enviromental)
-        {
-            _enviromental = enviromental;
-            _jsonFilePath = Path.Combine(_enviromental.ContentRootPath, "Data", "ToRead.json");
-        }
+        private readonly IToReadService _toRead;
 
-        [HttpGet(Name = "GetToRead")]
-        public IActionResult GetToRead()
-        {
-            List<ToRead> booksToRead = LoadToReadFromJson();
-            if (booksToRead == null)
-            {
-                return NotFound();
-            }
 
-            return Ok(booksToRead);
-        }
-
-        [HttpPost(Name = "AddToRead")]
-        public IActionResult AddToRead(ToRead toRead)
-        {
-            List<ToRead> booksToRead = LoadToReadFromJson() ?? new List<ToRead>();
-            booksToRead.Add(toRead);
-            SaveToReadToJson(booksToRead);
-            return Ok();
-        }
-
-        private List<ToRead> LoadToReadFromJson()
+        [HttpGet]
+        [Route("readbooks")]
+        public async Task<IActionResult> GetToRead([FromQuery] int ID)
         {
             try
             {
-                using (StreamReader reader = new StreamReader(_jsonFilePath))
-                {
-                    string json = reader.ReadToEnd();
-                    return JsonSerializer.Deserialize<List<ToRead>>(json);
-                }
+                var result = await _toRead.GetToRead(ID);
+                return Ok(result);
             }
-            catch (IOException)
+            catch (Exception e)
             {
-                return null;
+                return BadRequest(e.Message);
             }
+
         }
 
-        private void SaveToReadToJson(List<ToRead> booksToRead)
+        [HttpPost]
+        [Route("addtoreadbook")]
+        public async Task<IActionResult> AddToRead(ToRead toRead)
         {
             try
             {
-                string jsonString = JsonConvert.SerializeObject(booksToRead, Formatting.Indented);
-                System.IO.File.WriteAllText(_jsonFilePath, jsonString);
+                var connectionString = "TODO!;";
+                var connection = new SqlConnection(connectionString);
+                connection.Open();
+                var toReadId = toRead.ID;
+                var properTytul = toRead.Tytul!.Replace("'", "\"");
+                var properAutor = toRead.Autor!.Replace("'", "\"");
+                var query = $"INSERT INTO ToRead VALUES ('{toReadId}', '{properTytul}', '{properAutor}')";
+                var commmand = new SqlCommand(query, connection);
+                var id = commmand.ExecuteNonQuery();
+                connection.Close();
+                return Ok();
             }
-            catch (IOException)
+            catch (Exception e)
             {
-        
+                return BadRequest(e.Message);
             }
+
         }
     }
 }
