@@ -15,11 +15,11 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("allbooks")]
-        public async Task<IActionResult> GetBooks([FromQuery] int ID)
+        public async Task<IActionResult> GetBooksTask(Books book)
         {
             try
             {
-                var result = await _books.GetBooks(ID);
+                var result = await _books.GetBooks();
                 return Ok(result);
             }
             catch (Exception e)
@@ -31,7 +31,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("addbooks")]
-        public async Task<IActionResult> AddBooks(Books book)
+        public async Task<IActionResult> AddBooksTask(Books book)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("deletebooks")]
-        public IActionResult DeleteBooks(Books book)
+        public async Task<IActionResult> DeleteBooksTask(Books book)
         {
             try
             {
