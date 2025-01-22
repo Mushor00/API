@@ -1,13 +1,14 @@
 ﻿@inject NavigationManager Nav
-@page "/allbooks"
+@page "/"
 <h1>Brawo to prawidłowa odpowiedź</h1>
+<div style="display: flex">
 <div style="padding-top:50px">
     <button type="button" class="btn btn-primary" @onclick="() => AddBook()">Dodaj książkę</button>
 </div>
-<div style="padding-top:50px">
+<div style="padding-left: 10px; padding-top: 50px">
     <button type="button" class="btn btn-primary" @onclick="() => DeleteBook()">Usuń książkę</button>
 </div>
-
+</div>
 @code {
     private void AddBook()
     {
@@ -16,6 +17,6 @@
 
     private void DeleteBook()
     {
-        Nav.NavigateTo("/addbooks");
+        Nav.NavigateTo("/deletebooks");
     }
 }

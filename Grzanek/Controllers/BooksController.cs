@@ -36,13 +36,13 @@ namespace API.Controllers
             try
             {
                 var connectionString = "TODO!;";
-                var connection = new Microsoft.Data.SqlClient.SqlConnection(connectionString);
+                var connection = new SqlConnection(connectionString);
                 connection.Open();
                 var bookID = book.ID;
                 var properTytul = book.Tytul!.Replace("'", "\"");
                 var properAutor = book.Autor!.Replace("'", "\"");
                 var query = $"INSERT INTO Books VALUES ('{bookID}', {book.Data}, '{properTytul}', '{properAutor}')";
-                var commmand = new Microsoft.Data.SqlClient.SqlCommand(query, connection);
+                var commmand = new SqlCommand(query, connection);
                 var id = commmand.ExecuteNonQuery();
                 connection.Close();
                 return Ok();
