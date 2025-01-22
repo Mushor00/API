@@ -14,7 +14,7 @@ namespace API.Controllers
 
 
         [HttpGet]
-        [Route("allbooks")]
+        [Route("readbooks")]
         public async Task<IActionResult> GetBooks([FromQuery] int ID)
         {
             try

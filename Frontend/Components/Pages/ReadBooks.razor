@@ -1,5 +1,6 @@
-﻿@inject BooksService BooksService
+﻿@inject IBooksService BooksService
 @page "/readbooks"
+@using API.Services
 
 <h3>Przeczytane książki</h3>
 @if (books == null)
