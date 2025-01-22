@@ -1,0 +1,39 @@
+﻿@inject BooksService BooksService
+@page "/readbooks"
+
+<h3>Przeczytane książki</h3>
+@if (books == null)
+{
+    <p>Ładowanie...</p>
+}
+else
+{
+    <ul>
+        @foreach (var book in books)
+        {
+            <li>@book.Tytul - @book.Autor</li>
+        }
+    </ul>
+    <button class="btn btn-primary" @onclick="NavigateToAddBook">Dodaj książkę</button>
+    <button class="btn btn-danger" @onclick="NavigateToDeleteBook" style="margin-left: 10px;">Usuń książkę</button>
+}
+
+@code {
+    [Inject] private NavigationManager Nav { get; set; }
+    private List<Books> books;
+
+    protected override async Task OnInitializedAsync()
+    {
+        books = await BooksService.GetBooks();
+    }
+
+    private void NavigateToAddBook()
+    {
+        Nav.NavigateTo("/addbooks");
+    }
+
+    private void NavigateToDeleteBook()
+    {
+        Nav.NavigateTo("/deletebooks");
+    }
+}

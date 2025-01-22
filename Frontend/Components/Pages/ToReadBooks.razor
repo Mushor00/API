@@ -1,0 +1,34 @@
+﻿@page "/toreadbooks"
+@using API.Services
+@inject BooksService BooksService
+
+<h3>Książki do przeczytania</h3>
+@if (booksToRead == null)
+{
+    <p>Ładowanie...</p>
+}
+else
+{
+    <ul>
+        @foreach (var book in booksToRead)
+        {
+            <li>@book.Tytul - @book.Autor</li>
+        }
+    </ul>
+    <button class="btn btn-primary" @onclick="NavigateToAddToReadBook">Dodaj książkę do przeczytania</button>
+}
+
+@code {
+    [Inject] private NavigationManager Nav { get; set; }
+    private List<ToRead> booksToRead;
+
+    protected override async Task OnInitializedAsync()
+    {
+        booksToRead = await BooksService.GetToReadBooks();
+    }
+
+    private void NavigateToAddToReadBook()
+    {
+        Nav.NavigateTo("/addtoreadbook");
+    }
+}
